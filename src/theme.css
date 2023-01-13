@@ -61,7 +61,13 @@ h2 {
 
 h3 {
   font-size: 1.35rem;
+  margin-top: 0;
   margin-bottom: 1rem;
+}
+
+h4 {
+  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .mb-3 {
@@ -120,9 +126,36 @@ h3 {
   padding: 1rem 4rem;
   margin-bottom: 1rem;
   border-radius: 10px;
-  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2); */
   background: #fff;
   text-align: left;
+}
+
+.posts__post {
+  box-shadow: 0 0.1875rem 10rem 0 rgba(12, 22, 31, 0.08);
+	border-radius: 10px;
+  /* background-color: #f5f5f5; */
+  padding: 2rem 1rem 1rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.posts__post span {
+  display: block;
+  text-align: end;
+  margin-bottom: 0.5rem;
+}
+
+.posts__comment {
+  color: white;
+  background-color: #2d4f74;
+  margin-left: 3rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.posts__comment li {
+  margin-left: 3rem;
 }
 
 .post__counter {
