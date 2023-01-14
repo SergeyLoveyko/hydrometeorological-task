@@ -120,6 +120,18 @@ h4 {
   color: #fff;
 }
 
+
+
+/* #myChart {
+  width: 70%;
+} */
+
+.myChart {
+  margin: 0 auto;
+  width: 70%!important;
+  margin-bottom: 3rem;
+}
+
 .posts {
   margin: 0 auto;
   width: 70%;
