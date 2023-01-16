@@ -55,6 +55,8 @@ export default {
     return {
       newPostDate: [],
       count_list: [],
+      arrCountLetters: [],
+      arrTest: [10, 5, 29, 3, 5, 55, 40, 23, 75, 480],
 
       page: 1,
       pagination_offset: 0,
@@ -106,18 +108,32 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    // countLetterComments() {
-    //   // let arrSumComments = []
-    //   for (let post of this.count_list.posts) {
-    //         for (let item of post) {
-    //           const result = item.reduce((sum, current) => {
-    //             //  arrSumComments.push(sum + current)
-    //             return sum = current
-    //           });
+    countLetterComments() {
+      let arrSumComments = [];
 
-    //         }
-    //   }
-    // },
+      for (let childrenPosts of this.count_list) {
+        let arrTwo = [];
+
+        for (let comments of childrenPosts.posts) {
+
+          const sumText = Object.values(comments.posts).reduce((sum, current)=> { 
+            return sum + current.length;
+          }, 0)
+
+          arrTwo.push( sumText )
+
+        }
+        
+        const sumPost = arrTwo.reduce((sum, current) => {return sum + current}, 0)
+
+        arrSumComments.push( sumPost )
+
+      }
+
+      this.arrCountLetters = Array.from(arrSumComments);
+
+      console.log( "Count Lettet comments, res arr: ", typeof arrSumComments, arrSumComments );
+    },
 
     changePage(page_num) {
       this.page = page_num;
@@ -137,89 +153,148 @@ export default {
         behavior: "smooth"
       });
 
+      this.countLetterComments();
+      // this.changeTypeArrCountLetters(this.arrCountLetters);
+      // this.showChart();
+      
+
       // console.log( "Page number: ", this.page );
       // console.log( "Page offset: ", this.pagination_offset );
-    }
-
-  },
-
-  mounted() {
-    const ctx = document.getElementById('myChart');
-
-    // eslint-disable-next-line no-unused-vars
-    const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
-      datasets: [{
-        label: 'My First Dataset',
-        data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30,84],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
-        ],
-        borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 159, 64)',
-          'rgb(255, 205, 86)',
-          'rgb(75, 192, 192)',
-          'rgb(54, 162, 235)',
-          'rgb(153, 102, 255)',
-          'rgb(201, 203, 207)'
-        ],
-        borderWidth: 1
-      }]
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
+
+    showChart() {
+        const ctx = document.getElementById('myChart');
+
+        // this.renderChart(Array.from(this.arrCountLetters))
+
+        // eslint-disable-next-line no-unused-vars
+        const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+          datasets: [{
+            label: 'My First Dataset',
+            // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+            // data: Object.values(this.arrCountLetters),
+            data: Array.from(this.arrCountLetters),
+            // data: Array.from(this.arrTest),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)',
+              'rgb(153, 102, 255)',
+              'rgb(201, 203, 207)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
         }
-      }
+      });
     }
-  });
+
   },
+
+  // mounted() {
+
+
+  //   const ctx = document.getElementById('myChart');
+
+  //   // this.renderChart(Array.from(this.arrCountLetters))
+
+  //   console.log( "create Data:", this.arrCountLetters );
+
+  //   // eslint-disable-next-line no-unused-vars
+  //   const myChart = new Chart(ctx, {
+  //   type: 'bar',
+  //   data: {
+  //     labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+  //     datasets: [{
+  //       label: 'My First Dataset',
+  //       // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+  //       // data: Object.values(this.arrCountLetters),
+  //       data: Array.from(this.arrCountLetters),
+  //       // data: Array.from(this.arrTest),
+  //       backgroundColor: [
+  //         'rgba(255, 99, 132, 0.2)',
+  //         'rgba(255, 159, 64, 0.2)',
+  //         'rgba(255, 205, 86, 0.2)',
+  //         'rgba(75, 192, 192, 0.2)',
+  //         'rgba(54, 162, 235, 0.2)',
+  //         'rgba(153, 102, 255, 0.2)',
+  //         'rgba(201, 203, 207, 0.2)'
+  //       ],
+  //       borderColor: [
+  //         'rgb(255, 99, 132)',
+  //         'rgb(255, 159, 64)',
+  //         'rgb(255, 205, 86)',
+  //         'rgb(75, 192, 192)',
+  //         'rgb(54, 162, 235)',
+  //         'rgb(153, 102, 255)',
+  //         'rgb(201, 203, 207)'
+  //       ],
+  //       borderWidth: 1
+  //     }]
+  //   },
+  //   options: {
+  //     scales: {
+  //       y: {
+  //         beginAtZero: true
+  //       }
+  //     }
+  //   }
+  // });
+  // },
 
   computed: {
     pagesCount() {
       return Math.ceil(this.pagination_item_total / this.pagination_items_per_page)
-    },
-
-    // countPosts() {
-    //   return this.newPostDate.length;
-    // }
+    }
   },
 
   created() {
     this.axios.get('/posts').then(response => {
 
       this.postTextDevision(response.data);
-      // console.log( this.newPostDate );
+
       this.pagination_item_total = this.newPostDate.length
-      // console.log( this.pagination_item_total );
 
       this.changePage(1);
 
-    });
-
-    this.axios.get('/comments').then(response => {
+    }).then(() => {
+      this.axios.get('/comments').then(response => {
 
 
       // console.log( response.data );
 
-      this.changePage(1);
       this.sortPosts(response.data);
       this.rendomNumberComments(this.newPostDate);
+      this.countLetterComments();
+      this.changePage(1);
 
       // console.log( this.newPostDate );
       console.log( this.count_list );
+      console.log( typeof Array.from(this.arrCountLetters), Array.from(this.arrCountLetters) );
+      console.log( typeof Array.from(this.arrTest), Array.from(this.arrTest) );
 
-
+      this.showChart()
+    });
     });
   }
 }
