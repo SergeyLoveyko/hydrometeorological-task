@@ -5,31 +5,21 @@
       <h2>Posts</h2>
       <ul >
         <li class="posts__post" v-for="post in count_list" :key="post.id">
-          <ul class="mb-3">
-            <li> <h3> {{ post.title }} </h3> </li>
-            <li class="pl_3">
-              <ul>
-                <li  v-for="item in post.text" :key="item.id"> {{ item }} </li>
-              </ul>
-            </li>
+          <h3> {{ post.title }} </h3>
+          <div class="mb-3">
+            <p class="pl_3" v-for="item in post.text" :key="item.id"> {{ item }} </p>
             <!-- <li>{{ item.body }}</li> -->
-            <li></li>
-          </ul>
+          </div>
           <hr />
-          <span >Comments</span>
+          <div class="post__comment-counter"> Count comments: {{ post.posts.length }} </div>
 
           <ul>
             <li class="posts__comment" v-for="item in post.posts" :key="item.id">
               <h4>User: {{ item.name }}</h4> 
-              <ul>
-                <li v-for="item in item.posts" :key="item.id"> <i>{{ item }}</i> </li>
-              </ul>
+                <p class="pl_3" v-for="item in item.posts" :key="item.id"> <i>{{ item }}</i> </p>
             </li>
           </ul>
-          <div class="post__counter">
-            <div class="post__num"> Counter letters: {{ post.text.length }} </div>
-            <div class="post__num"> Post № {{ post.id }} </div>
-          </div>
+          <div class="post__num"> Post № {{ post.id }} </div>
         </li>
       </ul>
     </div>

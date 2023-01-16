@@ -28,6 +28,7 @@ p,
 ul {
   line-height: 1.7;
   list-style: none;
+  margin: 0;
   padding: 0;
 }
 
@@ -164,6 +165,11 @@ h4 {
   margin-bottom: 1rem;
   padding: 1rem;
   border-radius: 10px;
+}
+
+.post__comment-counter {
+  margin-left: 3rem;
+  margin-bottom: 1rem;
 }
 
 .posts__comment li {
