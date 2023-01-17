@@ -96,7 +96,10 @@ export default {
 
     sortPosts(commentsData) {
       for (let comment of commentsData) {
-        this.mainPostDate[comment.postId - 1].posts.push({name: comment.name, posts: comment.body.split('\n')})
+        this.mainPostDate[comment.postId - 1]
+          .posts.push({name: comment.name, posts: comment.body
+          .split('\n'), email: comment.email
+        });
       }
       // console.log( 'Comments arr new:', this.newPostDate );
     },
@@ -168,7 +171,13 @@ export default {
 
         for (let comments of childrenPosts.posts) {
 
-          const sumText = Object.values(comments.posts).reduce((sum, current)=> { 
+          console.log( "Comments Post: ", comments.email );
+
+          // const sumText = Object.values(comments.posts).reduce((sum, current)=> { 
+          //   return sum + current.length;
+          // }, 0)
+
+          const sumText = Object.values(comments.email).reduce((sum, current)=> { 
             return sum + current.length;
           }, 0)
 
@@ -340,6 +349,8 @@ export default {
       // console.log( this.newPostDate );
       // console.log( typeof Array.from(this.arrCountLetters), Array.from(this.arrCountLetters) );
       // console.log( "Main Data: ", this.mainPostDate );
+      console.log( "Respons Comments Data: ", response.data );
+      
 
       this.showChart()
     });
