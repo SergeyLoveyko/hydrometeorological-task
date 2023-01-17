@@ -4,13 +4,16 @@
     <div class="posts">
       <h2>Posts</h2>
       <form class="form" action="">
-        <input class="form__input" type="text" v-model="inputValue">
-        <div>
-          <button class="mr-2" @click.prevent="filterPostdata">Search</button>
-          <button @click.prevent="resetPostData">Reset</button>
+        <div class="form__content">
+          <input class="form__input" type="text" v-model="inputValue">
+          <div>
+            <button class="mr-2" @click.prevent="filterPostdata">Search</button>
+            <button @click.prevent="resetPostData">Reset</button>
+          </div>
         </div>
+        <div v-if="search != false">  <strong> Number of found: {{ newPostDate.length }} </strong> </div>
       </form>
-      <div> {{ inputValue }} </div>
+      
       <ul >
         <li class="posts__post" v-for="post in count_list" :key="post.id">
           <h3> {{ post.title }} </h3>
@@ -55,6 +58,7 @@ export default {
       newPostDate: [],
       count_list: [],
       arrCountLetters: [],
+      search: false,
       arrTest: [10, 5, 29, 3, 5, 55, 40, 23, 75, 480],
 
       inputValue: '',
@@ -131,7 +135,10 @@ export default {
       }
 
       this.countLetterComments();
+      this.pagination_item_total = this.newPostDate.length
       this.changePage(1);
+
+      this.search = true;
 
       console.log( "Input value: ", typeof this.inputValue, this.inputValue );
       // console.log( "Input value: ", this.inputValue );
@@ -143,7 +150,10 @@ export default {
       this.newPostDate =  this.mainPostDate;
 
       this.countLetterComments();
+      this.pagination_item_total = this.newPostDate.length
       this.changePage(1);
+
+      this.search = false;
 
       console.log( "New Posts Data after filter: ", this.newPostDate );
       console.log( "Count List: ", this.count_list );
@@ -316,16 +326,14 @@ export default {
     this.axios.get('/posts').then(response => {
 
       this.postTextDevision(response.data);
-      this.pagination_item_total = this.mainPostDate.length
-
+      
     }).then(() => {
       this.axios.get('/comments').then(response => {
 
       this.sortPosts(response.data);
       this.rendomNumberComments(this.mainPostDate);
-
       this.resetPostData();
-
+      
       // this.countLetterComments();
       // this.changePage(1);
 

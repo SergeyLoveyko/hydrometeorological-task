@@ -149,9 +149,13 @@ h4 {
 }
 
 .form {
+  
+  margin-bottom: 2rem;
+}
+
+.form__content {
   display: flex;
   margin-bottom: 2rem;
-
 }
 
 .form__input {
