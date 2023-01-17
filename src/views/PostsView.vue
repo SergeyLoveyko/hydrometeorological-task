@@ -3,6 +3,14 @@
     <canvas id="myChart" class="myChart"></canvas>
     <div class="posts">
       <h2>Posts</h2>
+      <form class="form" action="">
+        <input class="form__input" type="text" v-model="inputValue">
+        <div>
+          <button class="mr-2" @click.prevent="filterPostdata">Search</button>
+          <button @click.prevent="resetPostData">Reset</button>
+        </div>
+      </form>
+      <div> {{ inputValue }} </div>
       <ul >
         <li class="posts__post" v-for="post in count_list" :key="post.id">
           <h3> {{ post.title }} </h3>
@@ -43,11 +51,13 @@ export default {
 
   data() {
     return {
+      mainPostDate: [],
       newPostDate: [],
       count_list: [],
       arrCountLetters: [],
       arrTest: [10, 5, 29, 3, 5, 55, 40, 23, 75, 480],
 
+      inputValue: '',
       page: 1,
       pagination_offset: 0,
       pagination_item_total: 0,
@@ -77,12 +87,12 @@ export default {
         
       }
 
-      this.newPostDate = arr;
+      this.mainPostDate = arr;
     },
 
     sortPosts(commentsData) {
       for (let comment of commentsData) {
-        this.newPostDate[comment.postId - 1].posts.push({name: comment.name, posts: comment.body.split('\n')})
+        this.mainPostDate[comment.postId - 1].posts.push({name: comment.name, posts: comment.body.split('\n')})
       }
       // console.log( 'Comments arr new:', this.newPostDate );
     },
@@ -97,6 +107,48 @@ export default {
       // console.log( Math.floor(Math.random() * (max - min + 1)) + min );
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
+
+    filterPostdata() {
+
+      // if (this.inputValue == '') {
+      //   this.newPostDate = this.mainPostDate;
+      // } 
+      
+      if (this.inputValue !== '') {
+        this.newPostDate = [];
+
+        for (let post of this.mainPostDate) {
+
+          if (post.title.includes( this.inputValue ) == true ) {
+            this.newPostDate.push(post)
+          } 
+          // this.newPostDate.push( typeof post.title )
+          // this.newPostDate.push( typeof this.inputValue, this.inputValue )
+          console.log( 'run' );
+        }
+
+        this.inputValue = '';
+      }
+
+      this.countLetterComments();
+      this.changePage(1);
+
+      console.log( "Input value: ", typeof this.inputValue, this.inputValue );
+      // console.log( "Input value: ", this.inputValue );
+      console.log( "New Posts Data after filter: ", this.newPostDate );
+      console.log( "Count List: ", this.count_list );
+    },
+
+    resetPostData() {
+      this.newPostDate =  this.mainPostDate;
+
+      this.countLetterComments();
+      this.changePage(1);
+
+      console.log( "New Posts Data after filter: ", this.newPostDate );
+      console.log( "Count List: ", this.count_list );
+    },
+
 
     countLetterComments() {
       let arrSumComments = [];
@@ -125,6 +177,7 @@ export default {
       console.log( "Count Lettet comments, res arr: ", typeof arrSumComments, arrSumComments );
     },
 
+
     changePage(page_num) {
       this.page = page_num;
       this.pagination_offset = (this.pagination_items_per_page * page_num) - this.pagination_items_per_page;
@@ -151,6 +204,7 @@ export default {
       // console.log( "Page number: ", this.page );
       // console.log( "Page offset: ", this.pagination_offset );
     },
+
 
     showChart() {
         const ctx = document.getElementById('myChart');
@@ -262,26 +316,22 @@ export default {
     this.axios.get('/posts').then(response => {
 
       this.postTextDevision(response.data);
-
-      this.pagination_item_total = this.newPostDate.length
-
-      this.changePage(1);
+      this.pagination_item_total = this.mainPostDate.length
 
     }).then(() => {
       this.axios.get('/comments').then(response => {
 
-
-      // console.log( response.data );
-
       this.sortPosts(response.data);
-      this.rendomNumberComments(this.newPostDate);
-      this.countLetterComments();
-      this.changePage(1);
+      this.rendomNumberComments(this.mainPostDate);
+
+      this.resetPostData();
+
+      // this.countLetterComments();
+      // this.changePage(1);
 
       // console.log( this.newPostDate );
-      console.log( this.count_list );
-      console.log( typeof Array.from(this.arrCountLetters), Array.from(this.arrCountLetters) );
-      console.log( typeof Array.from(this.arrTest), Array.from(this.arrTest) );
+      // console.log( typeof Array.from(this.arrCountLetters), Array.from(this.arrCountLetters) );
+      // console.log( "Main Data: ", this.mainPostDate );
 
       this.showChart()
     });
