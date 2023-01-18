@@ -1,11 +1,18 @@
 <template>
   <div class="home">
-    <canvas id="myChart" class="myChart"></canvas>
+    <barchart 
+      class="myChart" 
+      :chart="myChart"
+    >
+      <!-- :countLetterList="arrCountLetters"
+      :numberPostsList="newLabels" -->
+    </barchart>
+    <!-- <canvas id="myChart" class="myChart"></canvas> -->
     <div class="posts">
       <h2>Posts</h2>
       <form class="form" action="">
         <div class="form__content">
-          <input class="form__input" type="text" v-model="inputValue">
+          <input class="form__input" type="text" placeholder="Title post" v-model="inputValue">
           <div>
             <button class="mr-2" @click.prevent="filterPostdata">Search</button>
             <button @click.prevent="resetPostData">Reset</button>
@@ -47,10 +54,16 @@
 
 <script>
 import Paginate from 'vuejs-paginate-next';
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
+import BarChart from '@/views/BarChart.vue'
 
 export default {
   name: 'PostsView',
+
+  components: {
+   paginate: Paginate,
+   barchart: BarChart
+  },
 
   data() {
     return {
@@ -58,19 +71,67 @@ export default {
       newPostDate: [],
       count_list: [],
       arrCountLetters: [],
+      arrNumberPostList: [],
+      arrLetterTest: [],
+      arrNumberTest: [],
+      newLabels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
       search: false,
-      arrTest: [10, 5, 29, 3, 5, 55, 40, 23, 75, 480],
+
+
+      arrLetterTestNew: [],
+      arrNumberTestNew: [],
 
       inputValue: '',
       page: 1,
       pagination_offset: 0,
       pagination_item_total: 0,
-      pagination_items_per_page: 10
-    }
-  },
+      pagination_items_per_page: 10,
 
-  components: {
-   paginate: Paginate,
+      myChart: {
+        labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+        // labels: {0: 'Post  1', 1: 'Post  2', 2: 'Post  3', 3: 'Post  4', 4: 'Post  5', 5: 'Post  6', 6: 'Post  7', 7: 'Post  8', 8: 'Post  9', 9: 'Post  10'},
+        // labels: [],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        datasets: [{ 
+          data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+          // data: {0: 48, 1: 73, 2: 29, 3: 43, 4: 57, 5: 24, 6: 70, 7: 26, 8: 58, 9: 69},
+          // data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)',
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+          ],
+          borderWidth: 1
+        }]
+      }
+    }
   },
 
   methods: {
@@ -141,6 +202,8 @@ export default {
       this.pagination_item_total = this.newPostDate.length
       this.changePage(1);
 
+      // this.updateChart(this.myChart, this.newLabels, this.arrTest);
+
       this.search = true;
 
       console.log( "Input value: ", typeof this.inputValue, this.inputValue );
@@ -156,22 +219,29 @@ export default {
       this.pagination_item_total = this.newPostDate.length
       this.changePage(1);
 
+      this.changeProps();
+      // this.updateChart(this.myChart, this.newLabels, this.arrCountLetters);
+
       this.search = false;
 
-      console.log( "New Posts Data after filter: ", this.newPostDate );
+      // console.log( "New Posts Data after filter: ", this.newPostDate );
       console.log( "Count List: ", this.count_list );
+      // console.log( "My Chart: ", this.this.myChart );
     },
 
 
     countLetterComments() {
       let arrSumComments = [];
+      let arrIdPost = [];
 
       for (let childrenPosts of this.count_list) {
         let arrTwo = [];
 
         for (let comments of childrenPosts.posts) {
 
-          console.log( "Comments Post: ", comments.email );
+          // console.log( "Comments Post: ", comments.email );
+          // console.log( "Comments Post: ", comments );
+          
 
           // const sumText = Object.values(comments.posts).reduce((sum, current)=> { 
           //   return sum + current.length;
@@ -187,14 +257,67 @@ export default {
         
         const sumPost = arrTwo.reduce((sum, current) => {return sum + current}, 0)
 
-        arrSumComments.push( sumPost )
+        arrSumComments.push( sumPost );
+        // this.myChart.datasets.data = sumPost;
+        // this.myChart.labels = arrIdPost;
+        arrIdPost.push( "Post " + " " + childrenPosts.id );
+
+        // console.log( "childrenPosts Post: ", childrenPosts );
+        // console.log( "childrenPosts Post: ", childrenPosts );
 
       }
 
-      this.arrCountLetters = Array.from(arrSumComments);
+      const newArr = [];
 
+      for (let i = 0; i < arrSumComments.length; i++) {
+        newArr.push(arrSumComments[i]);
+      }
+
+      this.arrCountLetters = arrSumComments;
+      this.arrNumberPostList = arrIdPost;
+
+      this.myChart.datasets.data = arrSumComments;
+      this.myChart.labels = arrIdPost;
+
+      // console.log( "My Chart: ", this.myChart );
       console.log( "Count Lettet comments, res arr: ", typeof arrSumComments, arrSumComments );
+      console.log( "Arr Id Post List: ", arrIdPost );
+      console.log( "Arr Count Letters: ", newArr );
+
+      console.log( "Arr Count Post List: ", this.arrCountLetters );
+      console.log( "Arr Num Post List: ", this.arrNumberPostList );
     },
+
+
+
+
+    changeProps() {
+      // this.arrLetterTest = Array.from(this.arrCountLetters);
+      // this.arrNumberTest = Array.from(this.arrNumberPostList);
+      let arrLetter = [];
+      let arrNumber = [];
+
+      for (let i = 0; i < this.arrCountLetters.length; i++) {
+        arrLetter.push(this.arrCountLetters[i])
+      }
+
+      for (let j = 0; j < this.arrNumberPostList.length; j++) {
+        arrNumber.push(this.arrNumberPostList[j])
+      }
+
+      this.arrLetterTestNew = arrLetter;
+      this.arrNumberTestNew = arrNumber;
+
+      console.log( "----------------------" ); 
+      console.log( typeof arrLetter, arrLetter);
+      console.log( typeof arrNumber, arrNumber);
+      console.log( typeof this.arrLetterTestNew, this.arrLetterTestNew);
+      console.log( typeof this.arrNumberTestNew, this.arrNumberTestNew);
+      console.log( "----------------------" ); 
+
+    },
+
+
 
 
     changePage(page_num) {
@@ -216,6 +339,12 @@ export default {
       });
 
       this.countLetterComments();
+
+
+      console.log( "Post Number List: ", Array.from(this.arrNumberPostList) );
+
+      // this.updateChart(this.myChart, this.newLabels, this.arrCountLetters);
+
       // this.changeTypeArrCountLetters(this.arrCountLetters);
       // this.showChart();
       
@@ -225,110 +354,149 @@ export default {
     },
 
 
-    showChart() {
-        const ctx = document.getElementById('myChart');
+    // initChart() {
+    //     const ctx = document.getElementById('myChart');
 
-        // this.renderChart(Array.from(this.arrCountLetters))
+    //     // this.renderChart(Array.from(this.arrCountLetters))
 
-        // eslint-disable-next-line no-unused-vars
-        const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
-          datasets: [{
-            label: 'My First Dataset',
-            // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
-            // data: Object.values(this.arrCountLetters),
-            data: Array.from(this.arrCountLetters),
-            // data: Array.from(this.arrTest),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
-            ],
-            borderColor: [
-              'rgb(255, 99, 132)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 205, 86)',
-              'rgb(75, 192, 192)',
-              'rgb(54, 162, 235)',
-              'rgb(153, 102, 255)',
-              'rgb(201, 203, 207)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    }
+    //     // eslint-disable-next-line no-unused-vars
+    //     this.myChart = new Chart(ctx, {
+    //     // eslint-disable-next-line no-undef
+    //     // this.myChart = Vue.markRaw(new Chart(this.$refs.chart, {
+    //     type: 'bar',
+    //     data: {
+    //       // labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+    //       labels: this.newLabels,
+    //       datasets: [{
+    //         label: 'Count letter Email',
+    //         // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+    //         data: this.arrCountLetters,
+    //         // data: Array.from(this.arrTest),
+    //         backgroundColor: [
+    //           'rgba(255, 99, 132, 0.2)',
+    //           'rgba(255, 159, 64, 0.2)',
+    //           'rgba(255, 205, 86, 0.2)',
+    //           'rgba(75, 192, 192, 0.2)',
+    //           'rgba(54, 162, 235, 0.2)',
+    //           'rgba(153, 102, 255, 0.2)',
+    //           'rgba(201, 203, 207, 0.2)',
+    //           'rgba(101, 99, 132, 0.2)',
+    //           'rgba(176, 159, 64, 0.2)',
+    //           'rgba(205, 205, 86, 0.2)',
+    //         ],
+    //         borderColor: [
+    //           'rgb(255, 99, 132)',
+    //           'rgb(255, 159, 64)',
+    //           'rgb(255, 205, 86)',
+    //           'rgb(75, 192, 192)',
+    //           'rgb(54, 162, 235)',
+    //           'rgb(153, 102, 255)',
+    //           'rgb(201, 203, 207)',
+    //           'rgba(101, 99, 132)',
+    //           'rgba(176, 159, 64)',
+    //           'rgba(205, 205, 86)',
+    //         ],
+    //         borderWidth: 1
+    //       }]
+    //     },
+    //     options: {
+    //       scales: {
+    //         y: {
+    //           beginAtZero: true
+    //         }
+    //       }
+    //     }
+    //   });
+    // },
+
+    // updateChart(chart, label, data) {
+    //   // chart.data.forEach((datalab) => {
+    //   //   datalab.labels.push(label);
+    //   // });
+    //   chart.data.labels = label;
+    //   // chart.data.labels.push(label);
+
+    //   // chart.data.datasets.forEach((dataset) => {
+    //   //   dataset.data.push(data);
+    //   // });
+    //   chart.data.datasets[0].data = data;
+    //   chart.update();
+
+    //   console.log( "Chart Data: ", chart.data );
+    // }
 
   },
 
-  // mounted() {
+  mounted() {
 
+    // this.initChart();
 
-  //   const ctx = document.getElementById('myChart');
+    // const ctx = document.getElementById('myChart');
 
-  //   // this.renderChart(Array.from(this.arrCountLetters))
+    // // this.renderChart(Array.from(this.arrCountLetters))
 
-  //   console.log( "create Data:", this.arrCountLetters );
+    // console.log( "create Data:", this.arrCountLetters );
 
-  //   // eslint-disable-next-line no-unused-vars
-  //   const myChart = new Chart(ctx, {
-  //   type: 'bar',
-  //   data: {
-  //     labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
-  //     datasets: [{
-  //       label: 'My First Dataset',
-  //       // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
-  //       // data: Object.values(this.arrCountLetters),
-  //       data: Array.from(this.arrCountLetters),
-  //       // data: Array.from(this.arrTest),
-  //       backgroundColor: [
-  //         'rgba(255, 99, 132, 0.2)',
-  //         'rgba(255, 159, 64, 0.2)',
-  //         'rgba(255, 205, 86, 0.2)',
-  //         'rgba(75, 192, 192, 0.2)',
-  //         'rgba(54, 162, 235, 0.2)',
-  //         'rgba(153, 102, 255, 0.2)',
-  //         'rgba(201, 203, 207, 0.2)'
-  //       ],
-  //       borderColor: [
-  //         'rgb(255, 99, 132)',
-  //         'rgb(255, 159, 64)',
-  //         'rgb(255, 205, 86)',
-  //         'rgb(75, 192, 192)',
-  //         'rgb(54, 162, 235)',
-  //         'rgb(153, 102, 255)',
-  //         'rgb(201, 203, 207)'
-  //       ],
-  //       borderWidth: 1
-  //     }]
-  //   },
-  //   options: {
-  //     scales: {
-  //       y: {
-  //         beginAtZero: true
-  //       }
-  //     }
-  //   }
-  // });
-  // },
+    // // eslint-disable-next-line no-unused-vars
+    // const myChart = new Chart(ctx, {
+    //   type: 'bar',
+    //   data: {
+    //     labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+    //     datasets: [{
+    //       label: 'My First Dataset',
+    //       // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+    //       // data: Object.values(this.arrCountLetters),
+    //       data: Array.from(this.arrCountLetters),
+    //       // data: Array.from(this.arrTest),
+    //       backgroundColor: [
+    //         'rgba(255, 99, 132, 0.2)',
+    //         'rgba(255, 159, 64, 0.2)',
+    //         'rgba(255, 205, 86, 0.2)',
+    //         'rgba(75, 192, 192, 0.2)',
+    //         'rgba(54, 162, 235, 0.2)',
+    //         'rgba(153, 102, 255, 0.2)',
+    //         'rgba(201, 203, 207, 0.2)'
+    //       ],
+    //       borderColor: [
+    //         'rgb(255, 99, 132)',
+    //         'rgb(255, 159, 64)',
+    //         'rgb(255, 205, 86)',
+    //         'rgb(75, 192, 192)',
+    //         'rgb(54, 162, 235)',
+    //         'rgb(153, 102, 255)',
+    //         'rgb(201, 203, 207)'
+    //       ],
+    //       borderWidth: 1
+    //     }]
+    //   },
+    //   options: {
+    //     scales: {
+    //       y: {
+    //         beginAtZero: true
+    //       }
+    //     }
+    //   }
+    // });
+
+  },
 
   computed: {
     pagesCount() {
       return Math.ceil(this.pagination_item_total / this.pagination_items_per_page)
+    },
+
+    renderChart() {
+      return this.myChart;
+    },
+
+    countLettersList() {
+      return this.arrCountLetters;
+    },
+
+    NumberPostList() {
+      return this.arrNumberPostList;
     }
+
   },
 
   created() {
@@ -342,17 +510,26 @@ export default {
       this.sortPosts(response.data);
       this.rendomNumberComments(this.mainPostDate);
       this.resetPostData();
+
+
+
+
+      // console.log( "My Chart: ", this.myChart );
       
       // this.countLetterComments();
       // this.changePage(1);
+      // this.updateChart(this.myChart, this.newLabels, this.arrCountLetters);
+
+      
 
       // console.log( this.newPostDate );
       // console.log( typeof Array.from(this.arrCountLetters), Array.from(this.arrCountLetters) );
       // console.log( "Main Data: ", this.mainPostDate );
-      console.log( "Respons Comments Data: ", response.data );
+      // console.log( "Respons Comments Data: ", response.data );
       
 
-      this.showChart()
+      // this.showChart()
+      // this.addData(this.arrCountLetters);
     });
     });
   }

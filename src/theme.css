@@ -134,6 +134,7 @@ h4 {
 .myChart {
   margin: 0 auto;
   width: 70%!important;
+  /* height: 1000px!important; */
   margin-bottom: 3rem;
 }
 
