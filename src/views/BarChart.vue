@@ -2,7 +2,7 @@
   <Bar
     id="my-chart-id"
     :options="chartOptions"
-    :data="chart"
+    :data="chartData"
   />
 </template>
 
@@ -71,7 +71,11 @@ export default {
   },
 
   computed: {
-    // chartData() { return this.chart }
+
+    chartData() { 
+      console.log( "Chart Graph: ", this.chart );
+      return this.chart 
+    }
   }
 }
 </script>

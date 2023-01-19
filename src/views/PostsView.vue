@@ -2,7 +2,7 @@
   <div class="home">
     <barchart 
       class="myChart" 
-      :chart="myChart"
+      :chart="renderChart"
     >
       <!-- :countLetterList="arrCountLetters"
       :numberPostsList="newLabels" -->
@@ -74,7 +74,7 @@ export default {
       arrNumberPostList: [],
       arrLetterTest: [],
       arrNumberTest: [],
-      newLabels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+      // newLabels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
       search: false,
 
 
@@ -98,11 +98,16 @@ export default {
           'rgba(75, 192, 192, 0.2)',
           'rgba(54, 162, 235, 0.2)',
           'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
+          'rgba(201, 203, 207, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
         ],
         datasets: [{ 
-          data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+          label: 'My First Dataset',
+          // data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
           // data: {0: 48, 1: 73, 2: 29, 3: 43, 4: 57, 5: 24, 6: 70, 7: 26, 8: 58, 9: 69},
+          data: this.arrCountLetters,
           // data: [],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
@@ -219,7 +224,7 @@ export default {
       this.pagination_item_total = this.newPostDate.length
       this.changePage(1);
 
-      this.changeProps();
+      // this.changeProps();
       // this.updateChart(this.myChart, this.newLabels, this.arrCountLetters);
 
       this.search = false;
@@ -233,6 +238,53 @@ export default {
     countLetterComments() {
       let arrSumComments = [];
       let arrIdPost = [];
+
+      const testChart = {
+        labels: ['Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post', 'Post'],
+        // labels: {0: 'Post  1', 1: 'Post  2', 2: 'Post  3', 3: 'Post  4', 4: 'Post  5', 5: 'Post  6', 6: 'Post  7', 7: 'Post  8', 8: 'Post  9', 9: 'Post  10'},
+        // labels: [],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        datasets: [{ 
+          label: 'Coutn letters from email',
+          data: [65, 59, 80, 81, 56, 55, 40, 23, 75, 30, 84],
+          // data: {0: 48, 1: 73, 2: 29, 3: 43, 4: 57, 5: 24, 6: 70, 7: 26, 8: 58, 9: 69},
+          // data: this.arrCountLetters,
+          // data: [],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)',
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+          ],
+          borderWidth: 1
+        }]
+      };
 
       for (let childrenPosts of this.count_list) {
         let arrTwo = [];
@@ -276,8 +328,13 @@ export default {
       this.arrCountLetters = arrSumComments;
       this.arrNumberPostList = arrIdPost;
 
-      this.myChart.datasets.data = arrSumComments;
-      this.myChart.labels = arrIdPost;
+
+      testChart.datasets[0].data = arrSumComments;
+      testChart.labels = arrIdPost;
+
+
+      this.myChart = testChart;
+
 
       // console.log( "My Chart: ", this.myChart );
       console.log( "Count Lettet comments, res arr: ", typeof arrSumComments, arrSumComments );
@@ -291,31 +348,38 @@ export default {
 
 
 
-    changeProps() {
-      // this.arrLetterTest = Array.from(this.arrCountLetters);
-      // this.arrNumberTest = Array.from(this.arrNumberPostList);
-      let arrLetter = [];
-      let arrNumber = [];
+    // changeProps() {
+    //   // this.arrLetterTest = Array.from(this.arrCountLetters);
+    //   // this.arrNumberTest = Array.from(this.arrNumberPostList);
+    //   let arrLetter = [];
+    //   let arrNumber = [];
 
-      for (let i = 0; i < this.arrCountLetters.length; i++) {
-        arrLetter.push(this.arrCountLetters[i])
-      }
+      
 
-      for (let j = 0; j < this.arrNumberPostList.length; j++) {
-        arrNumber.push(this.arrNumberPostList[j])
-      }
+    //   for (let i = 0; i < this.arrCountLetters.length; i++) {
+    //     arrLetter.push(this.arrCountLetters[i])
+    //   }
 
-      this.arrLetterTestNew = arrLetter;
-      this.arrNumberTestNew = arrNumber;
+    //   for (let j = 0; j < this.arrNumberPostList.length; j++) {
+    //     arrNumber.push(this.arrNumberPostList[j])
+    //   }
 
-      console.log( "----------------------" ); 
-      console.log( typeof arrLetter, arrLetter);
-      console.log( typeof arrNumber, arrNumber);
-      console.log( typeof this.arrLetterTestNew, this.arrLetterTestNew);
-      console.log( typeof this.arrNumberTestNew, this.arrNumberTestNew);
-      console.log( "----------------------" ); 
+    //   this.arrLetterTestNew = Object.values(arrLetter);
+    //   this.arrNumberTestNew = Object.values(arrNumber);
 
-    },
+    //   console.log( "----------------------" ); 
+    //   console.log( "----------------------" ); 
+    //   console.log( typeof this.arrCountLetters, this.arrCountLetters);
+    //   console.log( typeof this.arrNumberPostList, this.arrNumberPostList);
+    //   console.log( "----------------------" ); 
+    //   console.log( typeof arrLetter, arrLetter);
+    //   console.log( typeof arrNumber, arrNumber);
+    //   console.log( "----------------------" ); 
+    //   console.log( typeof this.arrLetterTestNew, this.arrLetterTestNew);
+    //   console.log( typeof this.arrNumberTestNew, this.arrNumberTestNew);
+    //   console.log( "----------------------" ); 
+    //   console.log( "----------------------" ); 
+    // },
 
 
 
@@ -339,7 +403,6 @@ export default {
       });
 
       this.countLetterComments();
-
 
       console.log( "Post Number List: ", Array.from(this.arrNumberPostList) );
 
@@ -486,6 +549,7 @@ export default {
     },
 
     renderChart() {
+      console.log( "Chart: ", this.myChart );
       return this.myChart;
     },
 
