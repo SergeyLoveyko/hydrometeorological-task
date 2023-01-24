@@ -10,6 +10,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 import VueAxios from 'vue-axios';
 import api from './plugins/api';
+import "leaflet/dist/leaflet.css";
 
 import './theme.css'
 
